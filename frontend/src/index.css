@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background: #0a0a0a;
+  color: #fff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: #0a0a0a;
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: #a3a3a3;
+  color: #0a0a0a;
+}
+
+@layer components {
+  .action-button {
+    @apply inline-flex items-center justify-center transition duration-200 ease-out;
+    border-color: #343a36;
+  }
+
+  .action-button:hover:not(:disabled) {
+    border-color: #00ed64;
+    background-color: rgb(0 237 100 / 8%);
+    color: #fff;
+    box-shadow: 0 0 0 1px rgb(0 237 100 / 12%), 0 6px 20px rgb(0 0 0 / 20%);
+    transform: translateY(-1px);
+  }
+
+  .action-button:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .action-button:focus-visible {
+    outline: 2px solid #00ed64;
+    outline-offset: 3px;
+  }
+
+  .action-button-primary {
+    border: 1px solid #00ed64;
+    background: #00ed64;
+    color: #07140b;
+    box-shadow: 0 4px 16px rgb(0 237 100 / 12%);
+  }
+
+  .action-button-primary:hover:not(:disabled) {
+    border-color: #5bff9c;
+    background: #5bff9c;
+    color: #07140b;
+    box-shadow: 0 6px 24px rgb(0 237 100 / 24%);
+  }
+
+  .action-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .profile-gallery-dropdown {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-0.75rem);
+    transition:
+      max-height 300ms ease,
+      opacity 220ms ease,
+      transform 300ms ease;
+  }
+
+  .profile-gallery-dropdown-open {
+    max-height: 12rem;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .profile-photo-transition {
+    animation: profile-photo-drop 280ms ease-out both;
+  }
+
+  @keyframes profile-photo-drop {
+    from {
+      opacity: 0.5;
+      transform: translateY(-0.75rem) scale(0.99);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-button,
+  .profile-gallery-dropdown,
+  .profile-photo-transition {
+    transition: none;
+    animation: none;
+  }
+}
