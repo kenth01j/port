@@ -47,4 +47,29 @@ router.post("/", verifyToken, imageUpload.single("image"), (req, res) => {
   });
 });
 
+router.delete("/:filename", verifyToken, async (req, res) => {
+  const filename = req.params.filename;
+
+  // Only allow filenames created by our upload system.
+  if (!/^[0-9a-f-]{36}\.(jpg|png|webp|gif)$/i.test(filename)) {
+    return res.status(400).json({ message: "Invalid image filename." });
+  }
+
+  const filePath = path.join(uploadDirectory, filename);
+
+  try {
+    await fs.promises.unlink(filePath);
+    return res.json({ message: "Image deleted." });
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return res.status(404).json({ message: "Image file not found." });
+    }
+
+    console.error("Could not delete image:", error);
+    return res.status(500).json({ message: "Could not delete image." });
+  }
+});
+
+
 module.exports = router;
+
