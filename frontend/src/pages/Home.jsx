@@ -17,6 +17,7 @@ const PERMANENT_PROJECT_IMAGES = {
   rosdscanai: "/roadscanai.png",
   bluebookportal: "/bluebook-portal.png",
 };
+const TIDES_LIVE_LINK = "https://tides-yteo.onrender.com/";
 
 function SectionHeading({ children, icon: Icon, tone = "text-blue-400" }) {
   return (
@@ -111,10 +112,16 @@ export default function Home() {
                 const normalizedTitle = (project.title || "")
                   .toLowerCase()
                   .replace(/[^a-z0-9]/g, "");
-                const permanentImage = PERMANENT_PROJECT_IMAGES[normalizedTitle];
+                const isTidesProject = normalizedTitle.startsWith("tides");
+                const permanentImage = isTidesProject
+                  ? "/tides.png"
+                  : PERMANENT_PROJECT_IMAGES[normalizedTitle];
                 const usesPermanentImage = Boolean(permanentImage);
                 const imageUrl =
                   permanentImage || resolveAssetUrl(project.imageUrl);
+                const liveLink = isTidesProject
+                  ? TIDES_LIVE_LINK
+                  : project.liveLink;
 
                 return (
                   <article
@@ -151,11 +158,11 @@ export default function Home() {
                           ))}
                         </div>
                       </div>
-                      {(project.liveLink || project.repoLink) && (
+                      {(liveLink || project.repoLink) && (
                         <div className="mt-4 flex gap-3 border-t border-gray-800 pt-4">
-                          {project.liveLink && (
+                          {liveLink && (
                             <a
-                              href={project.liveLink}
+                              href={liveLink}
                               target="_blank"
                               rel="noreferrer"
                               className="flex-1 rounded-lg bg-white py-2 text-center text-sm font-semibold text-black transition hover:bg-gray-200"
