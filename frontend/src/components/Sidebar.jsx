@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ChevronDown,
+  Download,
   Facebook,
   Github,
   Instagram,
@@ -9,6 +10,7 @@ import {
   Mail,
   X,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { resolveAssetUrl } from "../utils/api";
 
@@ -34,7 +36,6 @@ export default function Sidebar({ hero = {} }) {
       ...(hero.profileImages || []).filter((image) => image !== hero.profileImageUrl),
     ]),
   ];
-  const availableSocialLinks = socialLinks.filter(({ key }) => socials[key]);
 
   function openProfileGallery() {
     setActiveProfileImage(profileImageUrl);
@@ -60,19 +61,19 @@ export default function Sidebar({ hero = {} }) {
   }, [isProfileImageOpen]);
 
   return (
-    <div className="hero-profile">
+    <aside className="h-fit rounded-3xl border border-gray-800 bg-[#121212] p-6 shadow-2xl shadow-black/50 sm:p-8 md:sticky md:top-8">
       {profileImageUrl ? (
         <button
           type="button"
           onClick={openProfileGallery}
           aria-label={`View ${hero.name || "profile"} photo larger`}
           aria-haspopup="dialog"
-          className="profile-img-button"
+          className="group relative mx-auto mb-4 block h-32 w-32 cursor-zoom-in overflow-hidden rounded-full border-4 border-[#1a1a1a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
         >
           <img
             src={profileImageUrl}
             alt={hero.name || "Profile"}
-            className="profile-img"
+            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.05]"
           />
         </button>
       ) : (
@@ -83,8 +84,15 @@ export default function Sidebar({ hero = {} }) {
           {(hero.name || "Y").charAt(0).toUpperCase()}
         </div>
       )}
-      {availableSocialLinks.length > 0 && (
-      <div className="social-links">
+      <h1 className="text-center text-2xl font-bold tracking-tight">
+        {hero.name || "Your Name"}
+      </h1>
+      {hero.bio && (
+        <p className="mt-5 whitespace-pre-line text-sm leading-7 text-neutral-400">
+        {hero.bio}
+        </p>
+      )}
+      <div className="mt-6 flex justify-center gap-3 border-t border-gray-800 pt-5 text-gray-400">
         {socialLinks.map(({ key, label, Icon }) => {
           const value = socials[key];
           if (!value) return null;
@@ -99,14 +107,19 @@ export default function Sidebar({ hero = {} }) {
               target={key === "email" ? undefined : "_blank"}
               rel={key === "email" ? undefined : "noreferrer"}
               aria-label={label}
-              className="social-link"
+              className="rounded-full bg-[#1a1a1a] p-2 transition hover:bg-gray-800 hover:text-white"
             >
               <Icon size={18} />
             </a>
           );
         })}
       </div>
-      )}
+      <Link
+        to="/resume"
+        className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white py-3 font-semibold text-black transition hover:bg-gray-200"
+      >
+        <Download size={17} /> View Resume
+      </Link>
       {isProfileImageOpen &&
         createPortal(
         <div
@@ -188,6 +201,6 @@ export default function Sidebar({ hero = {} }) {
         </div>,
         document.body,
       )}
-    </div>
+    </aside>
   );
 }
