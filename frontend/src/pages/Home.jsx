@@ -40,20 +40,9 @@ export default function Home() {
   }
 
   const { hero = {}, skills = [], projects = [], certificates = [] } = portfolio || {};
-  const profileBackground = "/profile.jpg";
 
   return (
     <div className="relative isolate min-h-screen overflow-hidden">
-      {profileBackground && (
-        <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
-          <img
-            src={profileBackground}
-            alt=""
-            className="h-full w-full scale-105 object-cover opacity-40 blur-[2px]"
-          />
-          <div className="absolute inset-0 bg-[#0a0a0a]/65" />
-        </div>
-      )}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-56 left-1/2 z-[1] h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-blue-500/[0.09] blur-[120px]"
