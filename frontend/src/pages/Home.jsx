@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
 import { usePortfolio } from "../context/PortfolioContext";
-import { resolveAssetUrl } from "../utils/api";
 
 function SectionHeading({ children, icon: Icon, tone = "text-blue-400" }) {
   return (
@@ -34,7 +33,7 @@ export default function Home() {
   }
 
   const { hero = {}, skills = [], projects = [], certificates = [] } = portfolio || {};
-  const profileBackground = resolveAssetUrl(hero.profileImageUrl);
+  const profileBackground = "/profile.jpg";
 
   return (
     <div className="relative isolate min-h-screen overflow-hidden">
@@ -71,7 +70,7 @@ export default function Home() {
             </p>
             <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                {hero.name || "Your Name"}
+                {hero.name || "KENTH JOHN"}
               </span>
             </h1>
             {hero.title && (

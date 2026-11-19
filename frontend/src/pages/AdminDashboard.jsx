@@ -59,6 +59,7 @@ function ProfileGalleryPicker({
   currentImages,
   currentMainImage,
   files,
+  name,
   primaryImage,
   onFilesChange,
   onPrimaryChange,

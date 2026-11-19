@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 
 import { resolveAssetUrl } from "../utils/api";
 
+const permanentProfileImage = "/profile.jpg";
+
 const socialLinks = [
   { key: "github", label: "GitHub", Icon: Github },
   { key: "linkedin", label: "LinkedIn", Icon: Linkedin },
@@ -27,13 +29,16 @@ export default function Sidebar({ hero = {} }) {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [activeProfileImage, setActiveProfileImage] = useState("");
   const socials = hero.socials || {};
-  const profileImageUrl = resolveAssetUrl(hero.profileImageUrl);
+  const profileImageUrl = permanentProfileImage;
   const profileImages = [
-    ...new Set([hero.profileImageUrl, ...(hero.profileImages || [])].filter(Boolean)),
+    ...new Set([
+      profileImageUrl,
+      ...(hero.profileImages || []).filter((image) => image !== hero.profileImageUrl),
+    ]),
   ];
 
   function openProfileGallery() {
-    setActiveProfileImage(hero.profileImageUrl);
+    setActiveProfileImage(profileImageUrl);
     setIsGalleryOpen(false);
     setIsProfileImageOpen(true);
   }
