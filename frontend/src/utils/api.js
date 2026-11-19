@@ -1,6 +1,7 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+const API_BASE_URL = import.meta.env.PROD
+  ? "/api"
+  : import.meta.env.VITE_API_URL || "/api";
+const API_ORIGIN = new URL(API_BASE_URL, window.location.origin).origin;
 const TOKEN_KEY = "portfolio_token";
 
 export function resolveAssetUrl(imageUrl) {
@@ -9,8 +10,17 @@ export function resolveAssetUrl(imageUrl) {
   try {
     const url = new URL(imageUrl, window.location.origin);
     if (
+      url.hostname === window.location.hostname &&
+      url.protocol === "http:" &&
+      window.location.protocol === "https:"
+    ) {
+      url.protocol = "https:";
+      return url.toString();
+    }
+
+    if (
       ["localhost", "127.0.0.1"].includes(url.hostname) &&
-      url.port === "5000"
+      url.pathname.startsWith("/uploads/")
     ) {
       return `${API_ORIGIN}${url.pathname}${url.search}`;
     }
