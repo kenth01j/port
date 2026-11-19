@@ -4,7 +4,10 @@ services:
     runtime: node
     plan: free
     rootDir: .
-    buildCommand: npm ci --prefix backend && npm ci --prefix frontend && npm --prefix frontend run build
+    buildCommand: >-
+      npm ci --omit=dev --prefix backend &&
+      npm ci --include=dev --prefix frontend &&
+      npm --prefix frontend run build
     startCommand: npm --prefix backend start
     healthCheckPath: /api/health
     envVars:
