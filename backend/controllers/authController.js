@@ -18,23 +18,37 @@ async function register(req, res) {
   }
 
   try {
+    const existingAdmin = await Admin.findOne({});
+
+    if (existingAdmin) {
+      return res.status(403).json({
+        message: "Admin registration is already closed.",
+      });
+    }
+
     const passwordHash = await bcrypt.hash(password, 12);
+
     await Admin.create({
       _id: "portfolio-admin",
       username: username.trim(),
       password: passwordHash,
     });
+
     return res.status(201).json({
       message: "Admin account created. You can now sign in.",
     });
   } catch (error) {
     if (error.code === 11000) {
       return res.status(409).json({
-        message: "An admin account already exists or that username is taken.",
+        message: "An admin account already exists.",
       });
     }
+
     console.error("Admin registration failed:", error);
-    return res.status(500).json({ message: "Could not create admin account." });
+
+    return res.status(500).json({
+      message: "Could not create admin account.",
+    });
   }
 }
 
@@ -42,11 +56,16 @@ async function login(req, res) {
   const { username, password } = req.body;
 
   if (typeof username !== "string" || typeof password !== "string") {
-    return res.status(400).json({ message: "Username and password are required." });
+    return res.status(400).json({
+      message: "Username and password are required.",
+    });
   }
 
   try {
-    const admin = await Admin.findOne({ username: username.trim() });
+    const admin = await Admin.findOne({
+      username: username.trim(),
+    });
+
     const passwordMatches =
       admin && (await bcrypt.compare(password, admin.password));
 
@@ -59,10 +78,14 @@ async function login(req, res) {
       process.env.JWT_SECRET,
       { expiresIn: "12h" },
     );
+
     return res.json({ token });
   } catch (error) {
     console.error("Admin login failed:", error);
-    return res.status(500).json({ message: "Could not sign in." });
+
+    return res.status(500).json({
+      message: "Could not sign in.",
+    });
   }
 }
 
