@@ -112,64 +112,80 @@ export default function Home() {
               Selected Projects
             </SectionHeading>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {projects.map((project) => (
-                <article
-                  key={project._id}
-                  className="group flex flex-col justify-between rounded-3xl border border-gray-800 bg-[#121212] transition hover:border-gray-600"
-                >
-                  {project.imageUrl && (
-                    <img
-                      src={resolveAssetUrl(project.imageUrl)}
-                      alt=""
-                      className="aspect-[16/9] w-full rounded-t-3xl object-cover"
-                    />
-                  )}
-                  <div className="flex flex-1 flex-col justify-between p-6">
-                    <div>
-                      <h3 className="mb-2 text-xl font-bold text-white transition group-hover:text-blue-400">
-                        {project.title}
-                      </h3>
-                      <p className="mb-4 text-sm leading-relaxed text-gray-400">
-                        {project.desc}
-                      </p>
-                      <div className="mb-6 flex flex-wrap gap-2">
-                        {(project.techStack || []).map((tech, index) => (
-                          <span
-                            key={`${tech}-${index}`}
-                            className="rounded-full border border-gray-800 bg-[#1a1a1a] px-3 py-1 text-xs text-gray-300"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    {(project.liveLink || project.repoLink) && (
-                      <div className="mt-4 flex gap-3 border-t border-gray-800 pt-4">
-                        {project.liveLink && (
-                          <a
-                            href={project.liveLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex-1 rounded-lg bg-white py-2 text-center text-sm font-semibold text-black transition hover:bg-gray-200"
-                          >
-                            Live Demo
-                          </a>
-                        )}
-                        {project.repoLink && (
-                          <a
-                            href={project.repoLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-700 bg-[#1a1a1a] py-2 text-sm font-semibold text-white transition hover:bg-gray-800"
-                          >
-                            <Github size={16} /> Code
-                          </a>
-                        )}
-                      </div>
+              {projects.map((project) => {
+                const normalizedTitle = (project.title || "")
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]/g, "");
+                const usesRoadScanAiImage =
+                  normalizedTitle === "roadscanai" ||
+                  normalizedTitle === "rosdscanai";
+                const imageUrl = usesRoadScanAiImage
+                  ? "/roadscanai.png"
+                  : resolveAssetUrl(project.imageUrl);
+
+                return (
+                  <article
+                    key={project._id}
+                    className="group flex flex-col justify-between rounded-3xl border border-gray-800 bg-[#121212] transition hover:border-gray-600"
+                  >
+                    {imageUrl && (
+                      <img
+                        src={imageUrl}
+                        alt=""
+                        className={
+                          usesRoadScanAiImage
+                            ? "aspect-[16/9] w-full rounded-t-3xl bg-[#121212] object-contain p-4"
+                            : "aspect-[16/9] w-full rounded-t-3xl object-cover"
+                        }
+                      />
                     )}
-                  </div>
-                </article>
-              ))}
+                    <div className="flex flex-1 flex-col justify-between p-6">
+                      <div>
+                        <h3 className="mb-2 text-xl font-bold text-white transition group-hover:text-blue-400">
+                          {project.title}
+                        </h3>
+                        <p className="mb-4 text-sm leading-relaxed text-gray-400">
+                          {project.desc}
+                        </p>
+                        <div className="mb-6 flex flex-wrap gap-2">
+                          {(project.techStack || []).map((tech, index) => (
+                            <span
+                              key={`${tech}-${index}`}
+                              className="rounded-full border border-gray-800 bg-[#1a1a1a] px-3 py-1 text-xs text-gray-300"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      {(project.liveLink || project.repoLink) && (
+                        <div className="mt-4 flex gap-3 border-t border-gray-800 pt-4">
+                          {project.liveLink && (
+                            <a
+                              href={project.liveLink}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex-1 rounded-lg bg-white py-2 text-center text-sm font-semibold text-black transition hover:bg-gray-200"
+                            >
+                              Live Demo
+                            </a>
+                          )}
+                          {project.repoLink && (
+                            <a
+                              href={project.repoLink}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-700 bg-[#1a1a1a] py-2 text-sm font-semibold text-white transition hover:bg-gray-800"
+                            >
+                              <Github size={16} /> Code
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
             {!projects.length && (
               <p className="text-sm text-gray-500">Projects will be added soon.</p>
