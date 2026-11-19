@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
 import { usePortfolio } from "../context/PortfolioContext";
+import { resolveAssetUrl } from "../utils/api";
 
 function SectionHeading({ children, icon: Icon, tone = "text-blue-400" }) {
   return (
