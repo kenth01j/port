@@ -12,6 +12,12 @@ import Sidebar from "../components/Sidebar";
 import { usePortfolio } from "../context/PortfolioContext";
 import { resolveAssetUrl } from "../utils/api";
 
+const PERMANENT_PROJECT_IMAGES = {
+  roadscanai: "/roadscanai.png",
+  rosdscanai: "/roadscanai.png",
+  bluebookportal: "/bluebook-portal.png",
+};
+
 function SectionHeading({ children, icon: Icon, tone = "text-blue-400" }) {
   return (
     <div className="mb-6 flex items-center gap-3">
@@ -116,12 +122,10 @@ export default function Home() {
                 const normalizedTitle = (project.title || "")
                   .toLowerCase()
                   .replace(/[^a-z0-9]/g, "");
-                const usesRoadScanAiImage =
-                  normalizedTitle === "roadscanai" ||
-                  normalizedTitle === "rosdscanai";
-                const imageUrl = usesRoadScanAiImage
-                  ? "/roadscanai.png"
-                  : resolveAssetUrl(project.imageUrl);
+                const permanentImage = PERMANENT_PROJECT_IMAGES[normalizedTitle];
+                const usesPermanentImage = Boolean(permanentImage);
+                const imageUrl =
+                  permanentImage || resolveAssetUrl(project.imageUrl);
 
                 return (
                   <article
@@ -133,7 +137,7 @@ export default function Home() {
                         src={imageUrl}
                         alt=""
                         className={
-                          usesRoadScanAiImage
+                          usesPermanentImage
                             ? "aspect-[16/9] w-full rounded-t-3xl bg-[#121212] object-contain p-4"
                             : "aspect-[16/9] w-full rounded-t-3xl object-cover"
                         }
